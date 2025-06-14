@@ -1,16 +1,23 @@
 const express = require("express");
 const router = express.Router();
-const Analytics = require("../models/Analytics");
 const auth = require("../middleware/auth");
 
 // Get analytics data
 router.get("/", auth, async (req, res) => {
   try {
-    let analytics = await Analytics.findOne({ user: req.user.userId });
+    // Initialize global analytics if not exists
+    if (!global.analytics) {
+      global.analytics = [];
+    }
 
-    if (!analytics) {
+    // Check if user already has analytics data
+    let userAnalytics = global.analytics.find(
+      (a) => a.user === req.user.userId
+    );
+
+    if (!userAnalytics) {
       // Create mock data if none exists
-      analytics = new Analytics({
+      userAnalytics = {
         user: req.user.userId,
         followers: Array.from({ length: 7 }, (_, i) => ({
           count: 1200 + i * 50,
@@ -26,12 +33,15 @@ router.get("/", auth, async (req, res) => {
           day: "Wednesday",
           time: "7 PM",
         },
-      });
-      await analytics.save();
+        lastUpdated: new Date(),
+      };
+
+      global.analytics.push(userAnalytics);
     }
 
-    res.json(analytics);
+    res.json(userAnalytics);
   } catch (error) {
+    console.error("Error fetching analytics:", error);
     res.status(500).json({ message: "Error fetching analytics" });
   }
 });
@@ -41,24 +51,38 @@ router.post("/update", auth, async (req, res) => {
   try {
     const { followers, engagement, bestPostTime } = req.body;
 
-    let analytics = await Analytics.findOne({ user: req.user.userId });
+    if (!global.analytics) {
+      global.analytics = [];
+    }
 
-    if (!analytics) {
-      analytics = new Analytics({
+    let userAnalyticsIndex = global.analytics.findIndex(
+      (a) => a.user === req.user.userId
+    );
+
+    if (userAnalyticsIndex === -1) {
+      // Create new analytics entry
+      const newAnalytics = {
         user: req.user.userId,
         followers,
         engagement,
         bestPostTime,
-      });
+        lastUpdated: new Date(),
+      };
+      global.analytics.push(newAnalytics);
+      res.json(newAnalytics);
     } else {
-      analytics.followers = followers;
-      analytics.engagement = engagement;
-      analytics.bestPostTime = bestPostTime;
+      // Update existing analytics
+      global.analytics[userAnalyticsIndex] = {
+        ...global.analytics[userAnalyticsIndex],
+        followers,
+        engagement,
+        bestPostTime,
+        lastUpdated: new Date(),
+      };
+      res.json(global.analytics[userAnalyticsIndex]);
     }
-
-    await analytics.save();
-    res.json(analytics);
   } catch (error) {
+    console.error("Error updating analytics:", error);
     res.status(500).json({ message: "Error updating analytics" });
   }
 });
