@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../contexts/AuthContext";
+import { API_ENDPOINTS } from "../config/api";
 
 const Dashboard = () => {
   const [recentContent, setRecentContent] = useState([]);
@@ -12,12 +13,17 @@ const Dashboard = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [contentRes, analyticsRes] = await Promise.all([
-          axios.get("http://localhost:5000/api/content/history"),
-          axios.get("http://localhost:5000/api/analytics"),
+        const token = localStorage.getItem("token");
+        const [contentResponse, analyticsResponse] = await Promise.all([
+          axios.get(API_ENDPOINTS.CONTENT_HISTORY, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
+          axios.get(API_ENDPOINTS.ANALYTICS, {
+            headers: { Authorization: `Bearer ${token}` },
+          }),
         ]);
-        setRecentContent(contentRes.data.slice(0, 3));
-        setAnalytics(analyticsRes.data);
+        setRecentContent(contentResponse.data.slice(0, 3));
+        setAnalytics(analyticsResponse.data);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
       } finally {

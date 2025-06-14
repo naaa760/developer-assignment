@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { API_ENDPOINTS } from "../config/api";
 
 const niches = [
   "fashion",
@@ -25,21 +26,18 @@ const ContentGenerator = () => {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    fetchContentHistory();
+    fetchHistory();
   }, []);
 
-  const fetchContentHistory = async () => {
+  const fetchHistory = async () => {
     try {
       const token = localStorage.getItem("token");
-      const response = await axios.get(
-        "http://localhost:5000/api/content/history",
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      const response = await axios.get(API_ENDPOINTS.CONTENT_HISTORY, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setContentHistory(response.data);
     } catch (error) {
-      console.error("Error fetching content history:", error);
+      console.error("Error fetching history:", error);
     }
   };
 
@@ -58,14 +56,14 @@ const ContentGenerator = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.post(
-        "http://localhost:5000/api/content/generate",
+        API_ENDPOINTS.GENERATE_CONTENT,
         formData,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setGeneratedContent(response.data);
-      fetchContentHistory();
+      fetchHistory();
     } catch (error) {
       setError(error.response?.data?.message || "Failed to generate content");
     } finally {

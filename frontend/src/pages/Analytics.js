@@ -13,6 +13,7 @@ import {
   ArcElement,
 } from "chart.js";
 import { Line, Bar, Doughnut } from "react-chartjs-2";
+import { API_ENDPOINTS } from "../config/api";
 
 ChartJS.register(
   CategoryScale,
@@ -41,7 +42,7 @@ const Analytics = () => {
       setLoading(true);
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://localhost:5000/api/analytics?range=${timeRange}`,
+        `${API_ENDPOINTS.ANALYTICS}?range=${timeRange}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
