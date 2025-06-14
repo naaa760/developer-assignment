@@ -62,23 +62,19 @@ function App() {
         <URLCleaner />
         <div className="min-h-screen">
           <Routes>
+            {/* Test route */}
+            <Route
+              path="/test"
+              element={
+                <div className="min-h-screen flex items-center justify-center">
+                  <h1 className="text-2xl">Test Route Works!</h1>
+                </div>
+              }
+            />
+
             {/* Public routes for authentication */}
-            <Route
-              path="/sign-in"
-              element={
-                <SignedOut>
-                  <SignInPage />
-                </SignedOut>
-              }
-            />
-            <Route
-              path="/sign-up"
-              element={
-                <SignedOut>
-                  <SignUpPage />
-                </SignedOut>
-              }
-            />
+            <Route path="/sign-in/*" element={<SignInPage />} />
+            <Route path="/sign-up/*" element={<SignUpPage />} />
 
             {/* Protected routes */}
             <Route
@@ -148,14 +144,25 @@ function App() {
             <Route
               path="*"
               element={
-                <>
-                  <SignedIn>
-                    <Navigate to="/dashboard" replace />
-                  </SignedIn>
-                  <SignedOut>
-                    <Navigate to="/sign-in" replace />
-                  </SignedOut>
-                </>
+                <div className="min-h-screen flex items-center justify-center">
+                  <div className="text-center">
+                    <h1 className="text-2xl font-bold text-red-600 mb-4">
+                      404 - Page Not Found
+                    </h1>
+                    <p className="text-gray-600 mb-4">
+                      The page you're looking for doesn't exist.
+                    </p>
+                    <p className="text-sm text-gray-500">
+                      Current path: {window.location.pathname}
+                    </p>
+                    <a
+                      href="/sign-in"
+                      className="text-blue-600 hover:underline"
+                    >
+                      Go to Sign In
+                    </a>
+                  </div>
+                </div>
               }
             />
           </Routes>
