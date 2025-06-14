@@ -90,7 +90,7 @@ const ContentIdeasPage = () => {
       setTimeout(() => {
         setCopiedField("");
       }, 2000);
-    } catch (error) {
+    } catch {
       addToast("Failed to copy to clipboard", "error");
     }
   };

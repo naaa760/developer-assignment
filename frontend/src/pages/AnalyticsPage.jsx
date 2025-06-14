@@ -422,7 +422,7 @@ const AnalyticsPage = () => {
                   Recent Posts Performance
                 </h3>
                 <div className="space-y-3">
-                  {analyticsData.engagement.slice(0, 5).map((post, index) => {
+                  {analyticsData.engagement.slice(0, 5).map((post) => {
                     const totalEngagement = post.likes + post.comments;
                     const maxEngagement = Math.max(
                       ...analyticsData.engagement.map(
