@@ -9,9 +9,30 @@ dotenv.config();
 // Create Express app
 const app = express();
 
+// CORS Configuration for Production
+const corsOptions = {
+  origin: [
+    "http://localhost:3000", // Local development
+    "http://localhost:3001", // Alternative local port
+    process.env.FRONTEND_URL, // Environment variable for frontend URL
+  ].filter(Boolean),
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
 // Middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
+
+// Health check endpoint
+app.get("/health", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Server is running",
+    timestamp: new Date().toISOString(),
+  });
+});
 
 // MongoDB Connection
 mongoose
