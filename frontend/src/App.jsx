@@ -89,12 +89,7 @@ function App() {
             element={
               <>
                 <SignedIn>
-                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                    <Navigation />
-                    <main className="container mx-auto px-4 py-8">
-                      <ContentIdeasPage />
-                    </main>
-                  </div>
+                  <ContentIdeasPage />
                 </SignedIn>
                 <SignedOut>
                   <RedirectToSignIn />
@@ -107,12 +102,7 @@ function App() {
             element={
               <>
                 <SignedIn>
-                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                    <Navigation />
-                    <main className="container mx-auto px-4 py-8">
-                      <AnalyticsPage />
-                    </main>
-                  </div>
+                  <AnalyticsPage />
                 </SignedIn>
                 <SignedOut>
                   <RedirectToSignIn />
@@ -125,12 +115,7 @@ function App() {
             element={
               <>
                 <SignedIn>
-                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                    <Navigation />
-                    <main className="container mx-auto px-4 py-8">
-                      <ContentBankPage />
-                    </main>
-                  </div>
+                  <ContentBankPage />
                 </SignedIn>
                 <SignedOut>
                   <RedirectToSignIn />

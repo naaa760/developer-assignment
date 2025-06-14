@@ -8,6 +8,9 @@ import {
   AlertCircle,
   Wand2,
   Coffee,
+  Home,
+  BarChart3,
+  Bookmark,
 } from "lucide-react";
 import { contentAPI } from "../services/api";
 import LoadingSpinner from "../components/LoadingSpinner";
@@ -157,8 +160,8 @@ const ContentIdeasPage = () => {
 
       {/* Transparent Oval Navbar */}
       <header className="relative pt-6 px-6 z-20">
-        <div className="max-w-7xl mx-auto">
-          <div className="bg-white/30 backdrop-blur-md rounded-full border border-stone-200/50 shadow-lg">
+        <div className="w-full">
+          <div className="bg-white/30 backdrop-blur-md rounded-full border border-stone-200/50 shadow-lg max-w-7xl mx-auto">
             <div className="flex justify-between items-center h-16 px-8">
               <div className="flex items-center">
                 <div className="bg-gradient-to-r from-amber-700 to-stone-800 p-2.5 rounded-full shadow-lg">
@@ -168,6 +171,39 @@ const ContentIdeasPage = () => {
                   Creator Platform
                 </h1>
               </div>
+
+              {/* Navigation Buttons */}
+              <div className="hidden md:flex items-center space-x-2">
+                <a
+                  href="/dashboard"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 text-stone-700 hover:bg-white/50 hover:text-amber-800"
+                >
+                  <Home className="h-4 w-4" />
+                  <span>Dashboard</span>
+                </a>
+                <a
+                  href="/content-ideas"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 bg-white/50 text-amber-800 border border-amber-200"
+                >
+                  <Lightbulb className="h-4 w-4" />
+                  <span>Content Ideas</span>
+                </a>
+                <a
+                  href="/analytics"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 text-stone-700 hover:bg-white/50 hover:text-amber-800"
+                >
+                  <BarChart3 className="h-4 w-4" />
+                  <span>Analytics</span>
+                </a>
+                <a
+                  href="/content-bank"
+                  className="flex items-center space-x-2 px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 text-stone-700 hover:bg-white/50 hover:text-amber-800"
+                >
+                  <Bookmark className="h-4 w-4" />
+                  <span>Content Bank</span>
+                </a>
+              </div>
+
               <div className="flex items-center space-x-4">
                 <span className="text-sm text-stone-700 font-medium">
                   Welcome,{" "}
