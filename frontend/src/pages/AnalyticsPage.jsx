@@ -184,7 +184,7 @@ const AnalyticsPage = () => {
   // Prepare chart data with beautiful colors
   const followerChartData = {
     labels:
-      analyticsData?.followers.map((_, index) => `Day ${index + 1}`) || [],
+      analyticsData?.followers?.map((_, index) => `Day ${index + 1}`) || [],
     datasets: [
       {
         label: "Followers",
@@ -198,16 +198,23 @@ const AnalyticsPage = () => {
   };
 
   const engagementChartData = {
-    labels: analyticsData?.engagement.map((post) => `Post ${post.post}`) || [],
+    labels:
+      analyticsData?.engagement?.map((post) => `Post ${post?.post || "N/A"}`) ||
+      [],
     datasets: [
       {
         label: "Likes",
-        data: analyticsData?.engagement.map((post) => post.likes) || [],
+        data:
+          analyticsData?.engagement?.map((post) => Number(post?.likes || 0)) ||
+          [],
         backgroundColor: "rgba(180, 83, 9, 0.8)",
       },
       {
         label: "Comments",
-        data: analyticsData?.engagement.map((post) => post.comments) || [],
+        data:
+          analyticsData?.engagement?.map((post) =>
+            Number(post?.comments || 0)
+          ) || [],
         backgroundColor: "rgba(161, 98, 7, 0.8)",
       },
     ],
@@ -454,7 +461,11 @@ const AnalyticsPage = () => {
                       Current Followers
                     </p>
                     <p className="text-3xl font-bold bg-gradient-to-r from-stone-800 to-amber-800 bg-clip-text text-transparent">
-                      {analyticsData.metrics.currentFollowers.toLocaleString()}
+                      {analyticsData?.metrics?.currentFollowers
+                        ? Number(
+                            analyticsData.metrics.currentFollowers
+                          ).toLocaleString()
+                        : "0"}
                     </p>
                   </div>
                   <div className="bg-gradient-to-r from-amber-100 to-stone-100 p-3 rounded-full shadow-lg">
@@ -464,16 +475,18 @@ const AnalyticsPage = () => {
                 <div className="mt-4">
                   <div
                     className={`flex items-center ${
-                      analyticsData.metrics.followerGrowth >= 0
+                      (analyticsData?.metrics?.followerGrowth || 0) >= 0
                         ? "text-green-600"
                         : "text-red-600"
                     }`}
                   >
                     <TrendingUp className="h-4 w-4 mr-1" />
                     <span className="text-sm font-semibold">
-                      {analyticsData.metrics.followerGrowth >= 0 ? "+" : ""}
-                      {analyticsData.metrics.followerGrowth} (
-                      {analyticsData.metrics.followerGrowthPercentage}%)
+                      {(analyticsData?.metrics?.followerGrowth || 0) >= 0
+                        ? "+"
+                        : ""}
+                      {analyticsData?.metrics?.followerGrowth || 0} (
+                      {analyticsData?.metrics?.followerGrowthPercentage || 0}%)
                     </span>
                   </div>
                 </div>
@@ -486,7 +499,11 @@ const AnalyticsPage = () => {
                       Average Likes
                     </p>
                     <p className="text-3xl font-bold bg-gradient-to-r from-stone-800 to-amber-800 bg-clip-text text-transparent">
-                      {analyticsData.metrics.averageLikes.toLocaleString()}
+                      {analyticsData?.metrics?.averageLikes
+                        ? Number(
+                            analyticsData.metrics.averageLikes
+                          ).toLocaleString()
+                        : "0"}
                     </p>
                   </div>
                   <div className="bg-gradient-to-r from-red-100 to-pink-100 p-3 rounded-full shadow-lg">
@@ -510,7 +527,11 @@ const AnalyticsPage = () => {
                       Average Comments
                     </p>
                     <p className="text-3xl font-bold bg-gradient-to-r from-stone-800 to-amber-800 bg-clip-text text-transparent">
-                      {analyticsData.metrics.averageComments.toLocaleString()}
+                      {analyticsData?.metrics?.averageComments
+                        ? Number(
+                            analyticsData.metrics.averageComments
+                          ).toLocaleString()
+                        : "0"}
                     </p>
                   </div>
                   <div className="bg-gradient-to-r from-green-100 to-emerald-100 p-3 rounded-full shadow-lg">
@@ -534,7 +555,7 @@ const AnalyticsPage = () => {
                       Engagement Rate
                     </p>
                     <p className="text-3xl font-bold bg-gradient-to-r from-stone-800 to-amber-800 bg-clip-text text-transparent">
-                      {analyticsData.metrics.engagementRate}%
+                      {analyticsData?.metrics?.engagementRate || 0}%
                     </p>
                   </div>
                   <div className="bg-gradient-to-r from-purple-100 to-indigo-100 p-3 rounded-full shadow-lg">
@@ -597,32 +618,39 @@ const AnalyticsPage = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {analyticsData.engagement.map((post, index) => (
+                    {analyticsData?.engagement?.map((post, index) => (
                       <tr
                         key={index}
                         className="border-b border-stone-100 hover:bg-stone-50/50 transition-colors"
                       >
                         <td className="py-3 px-4 font-semibold text-stone-800">
-                          Post {post.post}
+                          Post {post?.post || index + 1}
                         </td>
                         <td className="py-3 px-4 text-stone-700">
-                          {post.likes.toLocaleString()}
+                          {post?.likes
+                            ? Number(post.likes).toLocaleString()
+                            : "0"}
                         </td>
                         <td className="py-3 px-4 text-stone-700">
-                          {post.comments.toLocaleString()}
+                          {post?.comments
+                            ? Number(post.comments).toLocaleString()
+                            : "0"}
                         </td>
                         <td className="py-3 px-4">
                           <span className="bg-gradient-to-r from-amber-100 to-stone-100 text-amber-800 px-3 py-1 rounded-full text-sm font-semibold">
                             {(
-                              ((post.likes + post.comments) /
-                                analyticsData.metrics.currentFollowers) *
+                              ((Number(post?.likes || 0) +
+                                Number(post?.comments || 0)) /
+                                Number(
+                                  analyticsData?.metrics?.currentFollowers || 1
+                                )) *
                               100
                             ).toFixed(2)}
                             %
                           </span>
                         </td>
                       </tr>
-                    ))}
+                    )) || []}
                   </tbody>
                 </table>
               </div>
