@@ -16,6 +16,7 @@ import SignInPage from "./auth/SignInPage";
 import SignUpPage from "./auth/SignUpPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
 import LoadingSpinner from "./components/LoadingSpinner";
+import URLCleaner from "./components/URLCleaner";
 import { Toaster } from "./components/Toaster";
 import "./App.css";
 
@@ -33,7 +34,7 @@ function App() {
     // Simulate initial loading
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1000);
+    }, 500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -54,13 +55,13 @@ function App() {
   return (
     <ClerkProvider
       publishableKey={clerkPubKey}
-      navigate={(to) => (window.location.href = to)}
       afterSignInUrl="/dashboard"
       afterSignUpUrl="/dashboard"
       signInUrl="/sign-in"
       signUpUrl="/sign-up"
     >
       <Router>
+        <URLCleaner />
         <div className="min-h-screen">
           <Routes>
             {/* Public routes for authentication */}

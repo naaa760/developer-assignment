@@ -19,10 +19,6 @@ const SignUpPage = () => {
               headerSubtitle: "hidden",
             },
           }}
-          afterSignUpUrl="/dashboard"
-          redirectUrl="/dashboard"
-          routing="path"
-          path="/sign-up"
         />
       </div>
     </AuthLayout>

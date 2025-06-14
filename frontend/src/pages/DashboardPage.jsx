@@ -1,6 +1,6 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useUser, UserButton } from "@clerk/clerk-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import {
   Lightbulb,
   BarChart3,
@@ -9,16 +9,9 @@ import {
   Sparkles,
   TrendingUp,
 } from "lucide-react";
-import { cleanClerkParams } from "../utils/urlCleanup";
 
 const DashboardPage = () => {
   const { user } = useUser();
-  const location = useLocation();
-
-  // Clean up URL parameters on component mount
-  useEffect(() => {
-    cleanClerkParams();
-  }, [location]);
 
   const features = [
     {

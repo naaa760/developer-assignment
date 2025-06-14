@@ -1,19 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { useAuth } from "@clerk/clerk-react";
-import { Navigate, useLocation } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import LoadingSpinner from "../components/LoadingSpinner";
-import { cleanClerkParams } from "../utils/urlCleanup";
 
 const ProtectedRoute = ({ children }) => {
   const { isLoaded, isSignedIn } = useAuth();
-  const location = useLocation();
-
-  // Clean up URL parameters after successful authentication
-  useEffect(() => {
-    if (isLoaded && isSignedIn) {
-      cleanClerkParams();
-    }
-  }, [isLoaded, isSignedIn, location]);
 
   // Show loading spinner while Clerk is loading
   if (!isLoaded) {
