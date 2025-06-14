@@ -3,6 +3,7 @@
 
 ![image](https://github.com/user-attachments/assets/8108a2c4-de78-443b-ae5d-5cb435f1a32b)
 
+Project link: https://developer-assignment-oci3.vercel.app/
 
 > **Transform your Instagram content creation with AI-powered insights, beautiful analytics, and seamless content management.**
 
