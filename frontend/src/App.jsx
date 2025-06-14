@@ -62,117 +62,115 @@ function App() {
     <ClerkProvider publishableKey={clerkPubKey}>
       <Router>
         <URLCleaner />
-        <div className="min-h-screen">
-          <Routes>
-            {/* Test route */}
-            <Route path="/test" element={<TestPage />} />
+        <Routes>
+          {/* Test route */}
+          <Route path="/test" element={<TestPage />} />
 
-            {/* Public auth routes - NO protection */}
-            <Route path="/sign-in/*" element={<SignInPage />} />
-            <Route path="/sign-up/*" element={<SignUpPage />} />
+          {/* Public auth routes - NO protection */}
+          <Route path="/sign-in/*" element={<SignInPage />} />
+          <Route path="/sign-up/*" element={<SignUpPage />} />
 
-            {/* Protected routes */}
-            <Route
-              path="/dashboard"
-              element={
-                <>
-                  <SignedIn>
-                    <DashboardPage />
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              }
-            />
-            <Route
-              path="/content-ideas"
-              element={
-                <>
-                  <SignedIn>
-                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                      <Navigation />
-                      <main className="container mx-auto px-4 py-8">
-                        <ContentIdeasPage />
-                      </main>
-                    </div>
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              }
-            />
-            <Route
-              path="/analytics"
-              element={
-                <>
-                  <SignedIn>
-                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                      <Navigation />
-                      <main className="container mx-auto px-4 py-8">
-                        <AnalyticsPage />
-                      </main>
-                    </div>
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              }
-            />
-            <Route
-              path="/content-bank"
-              element={
-                <>
-                  <SignedIn>
-                    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
-                      <Navigation />
-                      <main className="container mx-auto px-4 py-8">
-                        <ContentBankPage />
-                      </main>
-                    </div>
-                  </SignedIn>
-                  <SignedOut>
-                    <RedirectToSignIn />
-                  </SignedOut>
-                </>
-              }
-            />
+          {/* Protected routes */}
+          <Route
+            path="/dashboard"
+            element={
+              <>
+                <SignedIn>
+                  <DashboardPage />
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+          <Route
+            path="/content-ideas"
+            element={
+              <>
+                <SignedIn>
+                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+                    <Navigation />
+                    <main className="container mx-auto px-4 py-8">
+                      <ContentIdeasPage />
+                    </main>
+                  </div>
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+          <Route
+            path="/analytics"
+            element={
+              <>
+                <SignedIn>
+                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+                    <Navigation />
+                    <main className="container mx-auto px-4 py-8">
+                      <AnalyticsPage />
+                    </main>
+                  </div>
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
+          <Route
+            path="/content-bank"
+            element={
+              <>
+                <SignedIn>
+                  <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+                    <Navigation />
+                    <main className="container mx-auto px-4 py-8">
+                      <ContentBankPage />
+                    </main>
+                  </div>
+                </SignedIn>
+                <SignedOut>
+                  <RedirectToSignIn />
+                </SignedOut>
+              </>
+            }
+          />
 
-            {/* Root route */}
-            <Route
-              path="/"
-              element={
-                <>
-                  <SignedIn>
-                    <Navigate to="/dashboard" replace />
-                  </SignedIn>
-                  <SignedOut>
-                    <Navigate to="/sign-in" replace />
-                  </SignedOut>
-                </>
-              }
-            />
+          {/* Root route */}
+          <Route
+            path="/"
+            element={
+              <>
+                <SignedIn>
+                  <Navigate to="/dashboard" replace />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/sign-in" replace />
+                </SignedOut>
+              </>
+            }
+          />
 
-            {/* Catch all */}
-            <Route
-              path="*"
-              element={
-                <>
-                  <SignedIn>
-                    <Navigate to="/dashboard" replace />
-                  </SignedIn>
-                  <SignedOut>
-                    <Navigate to="/sign-in" replace />
-                  </SignedOut>
-                </>
-              }
-            />
-          </Routes>
+          {/* Catch all */}
+          <Route
+            path="*"
+            element={
+              <>
+                <SignedIn>
+                  <Navigate to="/dashboard" replace />
+                </SignedIn>
+                <SignedOut>
+                  <Navigate to="/sign-in" replace />
+                </SignedOut>
+              </>
+            }
+          />
+        </Routes>
 
-          <Toaster />
-        </div>
+        <Toaster />
       </Router>
     </ClerkProvider>
   );
