@@ -1,23 +1,24 @@
-const jwt = require("jsonwebtoken");
+const { ClerkExpressRequireAuth } = require("@clerk/clerk-sdk-node");
 
-const auth = async (req, res, next) => {
-  try {
-    const token = req.header("Authorization")?.replace("Bearer ", "");
+// Middleware to require authentication
+const requireAuth = ClerkExpressRequireAuth({
+  // Optional: customize error handling
+  onError: (error) => {
+    console.error("Authentication error:", error);
+    return {
+      status: 401,
+      message: "Authentication required",
+    };
+  },
+});
 
-    if (!token) {
-      return res
-        .status(401)
-        .json({ message: "No authentication token, access denied" });
-    }
-
-    const verified = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = verified;
-    next();
-  } catch (error) {
-    res
-      .status(401)
-      .json({ message: "Token verification failed, authorization denied" });
-  }
+// Optional middleware to get user info without requiring auth
+const getUser = (req, res, next) => {
+  // User info will be available in req.auth if authenticated
+  next();
 };
 
-module.exports = auth;
+module.exports = {
+  requireAuth,
+  getUser,
+};

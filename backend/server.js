@@ -1,60 +1,91 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
-const dotenv = require("dotenv");
+const helmet = require("helmet");
+const rateLimit = require("express-rate-limit");
+const { ClerkExpressWithAuth } = require("@clerk/clerk-sdk-node");
+require("dotenv").config();
 
-// Load environment variables
-dotenv.config();
-
-// Create Express app
 const app = express();
 
-// CORS Configuration for Production
-const corsOptions = {
-  origin: [
-    "http://localhost:3000", // Local development
-    "http://localhost:3001", // Alternative local port
-    process.env.FRONTEND_URL, // Environment variable for frontend URL
-  ].filter(Boolean),
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-};
+// Initialize Clerk
+if (!process.env.CLERK_SECRET_KEY) {
+  console.warn("Warning: CLERK_SECRET_KEY not found in environment variables");
+}
 
 // Middleware
-app.use(cors(corsOptions));
-app.use(express.json());
+app.use(helmet());
+app.use(
+  cors({
+    origin: process.env.FRONTEND_URL || "http://localhost:5173",
+    credentials: true,
+  })
+);
+app.use(express.json({ limit: "10mb" }));
+
+// Clerk authentication middleware (optional - adds auth info to req.auth)
+app.use(ClerkExpressWithAuth());
+
+// Rate limiting
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // limit each IP to 100 requests per windowMs
+});
+app.use("/api/", limiter);
+
+// MongoDB connection
+const connectDB = async () => {
+  try {
+    const conn = await mongoose.connect(
+      process.env.MONGODB_URI || "mongodb://localhost:27017/creator-platform"
+    );
+    console.log(`MongoDB Connected: ${conn.connection.host}`);
+  } catch (error) {
+    console.error("MongoDB connection error:", error);
+    process.exit(1);
+  }
+};
+
+// Connect to database
+connectDB();
+
+// Import routes
+const contentRoutes = require("./routes/content");
+const analyticsRoutes = require("./routes/analytics");
+
+// API routes
+app.use("/api/content", contentRoutes);
+app.use("/api/analytics", analyticsRoutes);
 
 // Health check endpoint
-app.get("/health", (req, res) => {
-  res.status(200).json({
-    status: "OK",
-    message: "Server is running",
+app.get("/api/health", (req, res) => {
+  res.json({
+    message: "Creator Platform API is running!",
     timestamp: new Date().toISOString(),
+    version: "1.0.0",
   });
 });
-
-// MongoDB Connection
-mongoose
-  .connect(
-    process.env.MONGODB_URI || "mongodb://localhost:27017/creator-platform"
-  )
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.error("MongoDB connection error:", err));
-
-// Routes
-app.use("/api/auth", require("./routes/auth"));
-app.use("/api/content", require("./routes/content"));
-app.use("/api/analytics", require("./routes/analytics"));
 
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error(err.stack);
-  res.status(500).json({ message: "Something went wrong!" });
+  res.status(500).json({
+    error: "Something went wrong!",
+    message:
+      process.env.NODE_ENV === "development"
+        ? err.message
+        : "Internal Server Error",
+  });
 });
 
-// Start server
+// 404 handler
+app.use("*", (req, res) => {
+  res.status(404).json({ error: "Route not found" });
+});
+
 const PORT = process.env.PORT || 5000;
+
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
+  console.log(`Health check: http://localhost:${PORT}/api/health`);
 });
