@@ -19,6 +19,9 @@ const SignUpPage = () => {
               headerSubtitle: "hidden",
             },
           }}
+          routing="path"
+          path="/sign-up"
+          signInUrl="/sign-in"
         />
       </div>
     </AuthLayout>

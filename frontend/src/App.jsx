@@ -57,8 +57,6 @@ function App() {
       publishableKey={clerkPubKey}
       afterSignInUrl="/dashboard"
       afterSignUpUrl="/dashboard"
-      signInUrl="/sign-in"
-      signUpUrl="/sign-up"
     >
       <Router>
         <URLCleaner />
@@ -66,7 +64,7 @@ function App() {
           <Routes>
             {/* Public routes for authentication */}
             <Route
-              path="/sign-in/*"
+              path="/sign-in"
               element={
                 <SignedOut>
                   <SignInPage />
@@ -74,7 +72,7 @@ function App() {
               }
             />
             <Route
-              path="/sign-up/*"
+              path="/sign-up"
               element={
                 <SignedOut>
                   <SignUpPage />
