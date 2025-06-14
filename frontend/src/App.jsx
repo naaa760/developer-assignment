@@ -17,6 +17,7 @@ import ContentIdeasPage from "./pages/ContentIdeasPage";
 import AnalyticsPage from "./pages/AnalyticsPage";
 import ContentBankPage from "./pages/ContentBankPage";
 import DashboardPage from "./pages/DashboardPage";
+import TestPage from "./pages/TestPage";
 import SignInPage from "./auth/SignInPage";
 import SignUpPage from "./auth/SignUpPage";
 import ProtectedRoute from "./auth/ProtectedRoute";
@@ -63,6 +64,9 @@ function App() {
         <URLCleaner />
         <div className="min-h-screen">
           <Routes>
+            {/* Test route */}
+            <Route path="/test" element={<TestPage />} />
+
             {/* Public auth routes - NO protection */}
             <Route path="/sign-in/*" element={<SignInPage />} />
             <Route path="/sign-up/*" element={<SignUpPage />} />
